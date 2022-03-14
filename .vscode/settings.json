@@ -1,0 +1,17 @@
+{
+    "nuxt.isNuxtApp": false,
+    "editor.formatOnSave": true,
+    "prettier.tabWidth": 4,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "95.165.163.132",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "95.165.163.132",
+            "database": "postgres",
+            "username": "postgres",
+            "password": "zero44"
+        }
+    ]
+}
