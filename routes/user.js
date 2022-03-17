@@ -16,6 +16,12 @@ router.get('/all', async (req, res) => {
             skip: (page - 1) * limit,
             take: limit,
             where: filter,
+            select: {
+                id: true,
+                username: true,
+                createdAt: true,
+                updatedAt: true,
+            },
         });
 
         if (users) {

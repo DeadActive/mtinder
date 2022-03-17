@@ -1,21 +1,18 @@
 const express = require('express');
 const morgan = require('morgan');
-const routes = require('./routes');
-const prisma = require('./db');
+const router = require('./routes');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = 8000;
 
 app.use(morgan('combined'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
 
-app.get('/', (req, res) => {
-    res.send({});
-});
-
-Object.entries(routes).forEach(([key, route]) => {
-    console.log(`Register route /${key}`);
-    app.use(`/${key}`, route);
-});
+app.use(router);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

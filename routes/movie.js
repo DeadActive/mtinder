@@ -2,6 +2,9 @@ const express = require('express');
 const config = require('../config');
 const tmdb = require('../api/tmdb');
 const router = express.Router();
+const auth = require('../middlewares/auth');
+
+router.use(auth);
 
 router.get('/random', async (req, res) => {
     try {
