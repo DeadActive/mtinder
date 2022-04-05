@@ -16,8 +16,14 @@ model User {
   updatedAt DateTime         @updatedAt
   username  String           @unique @db.VarChar(255)
   password  String
+  role      Role             @default(USER)
   liked     LikedMovies[]
   disliked  DislikedMovies[]
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model LikedMovies {

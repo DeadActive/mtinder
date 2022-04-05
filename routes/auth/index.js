@@ -10,7 +10,7 @@ const routes = {
 };
 
 Object.entries(routes).forEach(([key, route]) => {
-    console.log(`Register route /${key}`);
+    console.log(`Register route /auth/${key}`);
     router.use(`/${key}`, route);
 });
 

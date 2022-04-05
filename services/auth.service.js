@@ -41,7 +41,15 @@ const service = {
         return { ...user, accessToken };
     },
     async all() {
-        const allUsers = await prisma.user.findMany();
+        const allUsers = await prisma.user.findMany({
+            select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                username: true,
+                role: true,
+            },
+        });
         return allUsers;
     },
     async update(token, data) {
@@ -83,6 +91,7 @@ const service = {
                     updatedAt: true,
                     username: true,
                     id: true,
+                    role: true,
                 },
             });
 

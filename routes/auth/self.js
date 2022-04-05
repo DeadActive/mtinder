@@ -2,6 +2,7 @@ const express = require('express');
 const createHttpError = require('http-errors');
 const router = express.Router();
 const auth = require('../../services/auth.service');
+const authGuard = require('../../middlewares/auth');
 
 router.post('/register', async (req, res, next) => {
     try {
@@ -29,18 +30,18 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
-router.get('/all', async (req, res, next) => {
+router.get('/all', authGuard(['ADMIN']), async (req, res, next) => {
     try {
         const users = await auth.all();
         res.status(200).json({
-            data: users,
+            users,
         });
     } catch (e) {
         next(createHttpError(e.statusCode, e.message));
     }
 });
 
-router.get('/me', async (req, res, next) => {
+router.get('/me', authGuard(['ADMIN', 'USER']), async (req, res, next) => {
     try {
         const user = await auth.me(req.headers.authorization.split(' ')[1]);
         res.status(200).json({
@@ -54,7 +55,7 @@ router.get('/me', async (req, res, next) => {
     }
 });
 
-router.put('/me', async (req, res, next) => {
+router.put('/me', authGuard, async (req, res, next) => {
     try {
         const user = await auth.update(
             req.headers.authorization.split(' ')[1],

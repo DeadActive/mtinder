@@ -32,13 +32,34 @@ const service = {
 
         return new Promise((resolve) => {
             oauth2Client.getToken(code, async (err, token) => {
-                const jwtToken = await jwt.signAccessToken(token);
-
                 const auth = googleConnection();
                 auth.setCredentials(token);
 
-                const plus = google.plus({ version: 'v1', auth });
-                const me = await plus.people.get({ userId: 'me' });
+                const peopleService = google.people({ version: 'v1', auth });
+                const me = await peopleService.people.get({
+                    personFields: 'emailAddresses,names,photos',
+                    resourceName: 'people/me',
+                });
+
+                var user;
+                const username = me.data.emailAddresses[0].value;
+
+                try {
+                    user = await prisma.user.findUnique({
+                        where: {
+                            username,
+                        },
+                    });
+                } catch (e) {
+                    user = await prisma.user.create({
+                        data: {
+                            username,
+                            password: 'qwerty123',
+                        },
+                    });
+                }
+
+                const jwtToken = await jwt.signAccessToken(user);
 
                 resolve(jwtToken);
             });
